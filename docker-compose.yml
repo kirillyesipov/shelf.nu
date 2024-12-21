@@ -1,14 +1,14 @@
 version: "3.9"
 services:
   supabase:
-    image: supabase/postgres:15.3.0
+    image: supabase/postgres:latest
     container_name: supabase
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: shelf
       POSTGRES_USER: postgres
     ports:
-      - "54321:5432" # Supabase Postgres port
+      - "54321:5432"
     volumes:
       - supabase-data:/var/lib/postgresql/data
 
@@ -20,13 +20,11 @@ services:
       - supabase
     ports:
       - "8080:8080"
-    environment:
-      SUPABASE_URL: http://supabase:54321
-      SUPABASE_KEY: secret-api-key
-      DATABASE_URL: postgres://postgres:postgres@supabase:5432/shelf
+    env_file:
+      - .env
     volumes:
       - .:/src
-    command: [ "/src/start.sh" ]
+    command: [ "/src/init.sh" ]
 
 volumes:
   supabase-data:
